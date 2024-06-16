@@ -20,7 +20,7 @@
             color: #fff;
             text-align: center;
             position: relative;
-            height: 450px; /* Adjusted height */
+            height: 350px; /* Adjusted height */
             overflow: hidden;
         }
         header img {
@@ -166,8 +166,14 @@
         getCurrentTime().then(currentTime => {
             if (!currentTime) return;
 
-            const countDownDate = new Date(currentTime);
-            countDownDate.setDate(countDownDate.getDate() + 7);
+            let countDownDate = localStorage.getItem('countDownDate');
+            if (!countDownDate) {
+                countDownDate = new Date(currentTime);
+                countDownDate.setDate(countDownDate.getDate() + 7);
+                localStorage.setItem('countDownDate', countDownDate);
+            } else {
+                countDownDate = new Date(countDownDate);
+            }
 
             const countdownElement = document.getElementById('countdown');
 
@@ -185,6 +191,7 @@
                 } else {
                     clearInterval(interval);
                     countdownElement.innerHTML = 'Countdown Over';
+                    localStorage.removeItem('countDownDate');
                 }
             }, 1000);
         });
