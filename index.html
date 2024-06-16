@@ -181,12 +181,9 @@
             var countDownDate = new Date(currentTimeObj);
             countDownDate.setDate(countDownDate.getDate() + 7);
 
-            // Get the countdown element
-            var countdownElement = document.getElementById('countdown');
-
             // Function to update the countdown every second
             var interval = setInterval(function() {
-                var now = new Date(currentTime); // Get current time from API
+                var now = new Date(); // Get current time
 
                 var distance = countDownDate - now;
 
@@ -197,12 +194,12 @@
                     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
                     // Display the countdown in the 'countdown' element
-                    countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    document.getElementById('countdown').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
                 } else {
                     // If the countdown is over, clear the interval and display a message
                     clearInterval(interval);
-                    countdownElement.innerHTML = 'Countdown Over';
+                    document.getElementById('countdown').innerHTML = 'Countdown Over';
                 }
             }, 1000); //
         });
