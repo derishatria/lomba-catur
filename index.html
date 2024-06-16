@@ -159,6 +159,8 @@
        const countDownDate = new Date(nowJakarta);
        countDownDate.setDate(countDownDate.getDate() + 7);
 
+       console.log('Countdown End Time:', countDownDate); // Debug: Log countdown end time
+
        // Get the countdown element
        const countdownElement = document.getElementById('countdown');
 
@@ -169,32 +171,31 @@
            });
            const distance = new Date(countDownDate) - new Date(now);
 
+           console.log('Now:', now); // Debug: Log current time in Jakarta
+           console.log('Distance:', distance); // Debug: Log distance (difference in milliseconds)
+
            if (distance > 0) {
                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-               // Format time with leading zeros if needed
-               const formattedTime = `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+               // Display the countdown in the 'countdown' element
+               countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-               // Update the countdown element
-               countdownElement.innerHTML = `Batas Waktu Pendaftaran: ${formattedTime}`;
            } else {
-               // If countdown is over, display message and hide register link
+               // If the countdown is over, clear the interval and display a message
                clearInterval(interval);
-               countdownElement.innerHTML = "Pendaftaran telah ditutup";
-               document.querySelector('.register-link').style.display = 'none';
+               countdownElement.innerHTML = 'Countdown Over';
            }
-       }, 1000); // Update every second
+       }, 1000); // Update every second (1000 milliseconds)
    }
 
-   // Call setCountdown function on page load
+   // Call the setCountdown function when the page is loaded
    document.addEventListener('DOMContentLoaded', function() {
        setCountdown();
    });
 </script>
-
 
 </body>
 </html>
