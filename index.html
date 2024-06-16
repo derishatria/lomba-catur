@@ -39,6 +39,23 @@
         li {
             margin-bottom: 10px;
         }
+        .countdown {
+            font-size: 1.5em;
+            color: #d9534f;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .register-link {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
         footer {
             text-align: center;
             padding: 10px 0;
@@ -85,11 +102,43 @@
         <li>Pemain yang memenangkan pertandingan final akan dinyatakan sebagai juara turnamen.</li>
         <li>Jika terjadi hasil seri di pertandingan final, akan diadakan pertandingan ulang dengan aturan waktu yang sama.</li>
     </ul>
+
+    <a href="https://example.com/pendaftaran" class="register-link">Daftar Sekarang</a>
+
+    <div id="countdown" class="countdown"></div>
 </div>
 
 <footer>
     &copy; 2024 Turnamen Catur
 </footer>
+
+<script>
+    // Hitung batas waktu dari 7 hari sejak saat ini
+    const countDownDate = new Date();
+    countDownDate.setDate(countDownDate.getDate() + 7);
+    
+    const countdownElement = document.getElementById('countdown');
+
+    // Update hitungan mundur setiap detik
+    const interval = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownElement.innerHTML = `Batas Waktu Pendaftaran: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+        // Jika hitungan mundur selesai
+        if (distance < 0) {
+            clearInterval(interval);
+            countdownElement.innerHTML = "Pendaftaran telah ditutup";
+            document.querySelector('.register-link').style.display = 'none';
+        }
+    }, 1000);
+</script>
 
 </body>
 </html>
