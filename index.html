@@ -18,14 +18,16 @@
         header {
             background-color: #333;
             color: #fff;
-            padding: 0;
             text-align: center;
             position: relative;
+            height: 150px; /* Atur tinggi header */
+            overflow: hidden;
         }
         header img {
             width: 100%;
-            height: 300px; /* Atur tinggi gambar header */
+            height: 100%;
             object-fit: cover; /* Memastikan gambar terpotong secara proporsional */
+            object-position: center; /* Pusatkan gambar */
         }
         .header-content {
             position: absolute;
@@ -36,10 +38,11 @@
             background: rgba(0, 0, 0, 0.5); /* background semi-transparan untuk teks */
             padding: 10px;
             border-radius: 5px;
+            width: calc(100% - 40px); /* Mengatur lebar konten header agar lebih proporsional */
         }
         .header-content h1 {
             margin: 0;
-            font-size: 2em;
+            font-size: 1.5em;
             color: #fff;
         }
         .container {
@@ -90,7 +93,7 @@
 <header>
     <img src="https://images.pexels.com/photos/814133/pexels-photo-814133.jpeg" alt="Turnamen Catur">
     <div class="header-content">
-        <h1>Aturan Turnamen Catur</h1>
+        <h1>Lomba Catur Pesona Ciputih RT 14 Blok AB</h1>
     </div>
 </header>
 
