@@ -138,14 +138,6 @@
         <li>Jika terjadi hasil seri di pertandingan, akan diadakan pertandingan ulang dengan CATUR KILAT aturan waktu 3 menit.</li>
     </ul>
 
-    <h2>6. Schedule Pertandingan</h2>
-    <ul>
-        <li><strong>Babak 1:</strong> Pemain A vs Pemain B - Senin, 1 Agustus 2024, Pukul 09.00 WIB</li>
-        <li><strong>Babak 2:</strong> Pemain C vs Pemain D - Selasa, 2 Agustus 2024, Pukul 10.30 WIB</li>
-        <li><strong>Babak 3:</strong> Pemain E vs Pemain F - Rabu, 3 Agustus 2024, Pukul 11.45 WIB</li>
-        <!-- Add more matches as needed -->
-    </ul>
-
     <a href="https://docs.google.com/forms/d/e/1FAIpQLScw9BHde_49JIMd1NFpNRQsa2Cq-tXq8CbAlXqFdrfrxu7HuA/viewform" class="register-link">Daftar Sekarang</a>
 
     <div id="countdown" class="countdown"></div>
@@ -158,27 +150,30 @@
 <script>
    // Function to calculate and set the countdown timer
    function setCountdown() {
-       // Get current time in Jakarta timezone
-       const nowJakarta = new Date().toLocaleString('en-US', {
-           timeZone: 'Asia/Jakarta'
-       });
+       // Retrieve countdown end time from localStorage
+       let countDownDate = localStorage.getItem('countDownDate');
 
-       // Calculate the countdown end time (7 days from now in Jakarta timezone)
-       const countDownDate = new Date(nowJakarta);
-       countDownDate.setDate(countDownDate.getDate() + 7);
-
-       // Store the countdown end time in localStorage
-       localStorage.setItem('countDownDate', countDownDate);
+       // If countdown end time is not stored or is in the past, calculate a new one
+       if (!countDownDate || new Date(countDownDate) < new Date()) {
+           countDownDate = new Date();
+           countDownDate.setHours(countDownDate.getHours() + 7); // Set to UTC+7 (Asia/Jakarta timezone)
+           
+           // Store the new countdown end time in localStorage
+           localStorage.setItem('countDownDate', countDownDate);
+       } else {
+           countDownDate = new Date(countDownDate);
+       }
 
        // Get the countdown element
        const countdownElement = document.getElementById('countdown');
 
        // Function to update the countdown every second
        const interval = setInterval(function() {
-           const now = new Date().toLocaleString('en-US', {
-               timeZone: 'Asia/Jakarta'
-           });
-           const distance = countDownDate - new Date(now);
+           // Get current time in Jakarta timezone
+           const now = new Date();
+           now.setHours(now.getHours() + 7); // Set to UTC+7 (Asia/Jakarta timezone)
+
+           const distance = countDownDate - now;
 
            if (distance > 0) {
                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -205,8 +200,6 @@
        setCountdown();
    });
 </script>
-
-
 
 </body>
 </html>
