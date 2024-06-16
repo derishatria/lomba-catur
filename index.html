@@ -20,7 +20,7 @@
             color: #fff;
             text-align: center;
             position: relative;
-            height: 350px; /* Adjusted height */
+            height: 380px; /* Adjusted height */
             overflow: hidden;
         }
         header img {
@@ -139,13 +139,12 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Function to fetch current time from external API
+    // Function to fetch current time from external API using CORS proxy
     function getCurrentTime(callback) {
         $.ajax({
-            url: 'https://time.is/Jakarta',
+            url: 'https://cors-anywhere.herokuapp.com/https://time.is/Jakarta',
             dataType: 'text',
             success: function (data) {
-                // Extract current time from response
                 var currentTime = $(data).find('#twd').text().trim(); // Example, adjust as per the HTML structure of the website
                 callback(currentTime);
             },
@@ -164,11 +163,8 @@
                 return; // Exit if current time is not available
             }
 
-            // Parse current time as Date object
-            var currentTimeObj = new Date(currentTime);
-
             // Calculate the countdown end time (7 days from now)
-            var countDownDate = new Date(currentTimeObj);
+            var countDownDate = new Date(currentTime);
             countDownDate.setDate(countDownDate.getDate() + 7);
 
             // Function to update the countdown every second
