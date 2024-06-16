@@ -20,7 +20,7 @@
             color: #fff;
             text-align: center;
             position: relative;
-            height: 400px; /* Adjusted height */
+            height: 450px; /* Adjusted height */
             overflow: hidden;
         }
         header img {
@@ -149,62 +149,48 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Function to fetch current time from external API using CORS proxy
-    function getCurrentTime(callback) {
-        $.ajax({
-            url: 'https://robwu.nl/cors-anywhere.html/https://time.is/Jakarta',
-            dataType: 'text',
-            success: function (data) {
-                var currentTime = $(data).find('#twd').text().trim(); // Example, adjust as per the HTML structure of the website
-                callback(currentTime);
-            },
-            error: function () {
-                console.error('Failed to fetch current time from API.');
-                callback(null);
-            }
-        });
+    async function getCurrentTime() {
+        const apiUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://worldtimeapi.org/api/timezone/Asia/Jakarta');
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            const jsonResponse = JSON.parse(data.contents);
+            return new Date(jsonResponse.datetime);
+        } catch (error) {
+            console.error('Failed to fetch current time:', error);
+            return null;
+        }
     }
 
-    // Function to calculate and set the countdown timer
     function setCountdown() {
-        // Get current time from external API
-        getCurrentTime(function (currentTime) {
-            if (!currentTime) {
-                return; // Exit if current time is not available
-            }
+        getCurrentTime().then(currentTime => {
+            if (!currentTime) return;
 
-            // Calculate the countdown end time (7 days from now)
-            var countDownDate = new Date(currentTime);
+            const countDownDate = new Date(currentTime);
             countDownDate.setDate(countDownDate.getDate() + 7);
 
-            // Function to update the countdown every second
-            var interval = setInterval(function() {
-                var now = new Date(); // Get current time
+            const countdownElement = document.getElementById('countdown');
 
-                var distance = countDownDate - now;
+            const interval = setInterval(() => {
+                const now = new Date();
+                const distance = countDownDate - now;
 
                 if (distance > 0) {
-                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                    // Display the countdown in the 'countdown' element
-                    document.getElementById('countdown').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
+                    countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
                 } else {
-                    // If the countdown is over, clear the interval and display a message
                     clearInterval(interval);
-                    document.getElementById('countdown').innerHTML = 'Countdown Over';
+                    countdownElement.innerHTML = 'Countdown Over';
                 }
-            }, 1000); // Update every second (1000 milliseconds)
+            }, 1000);
         });
     }
 
-    // Call the setCountdown function when the page is loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        setCountdown();
-    });
+    document.addEventListener('DOMContentLoaded', setCountdown);
 </script>
 
 </body>
