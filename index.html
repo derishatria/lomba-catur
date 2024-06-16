@@ -20,14 +20,14 @@
             color: #fff;
             text-align: center;
             position: relative;
-            height: 300px; /* Atur tinggi header */
+            height: 180px; /* Adjusted height */
             overflow: hidden;
         }
         header img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Memastikan gambar terpotong secara proporsional */
-            object-position: center; /* Pusatkan gambar */
+            object-fit: cover; /* Ensure the image covers the header */
+            object-position: center; /* Center the image */
         }
         .header-content {
             position: absolute;
@@ -35,10 +35,10 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            background: rgba(0, 0, 0, 0.5); /* background semi-transparan untuk teks */
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for text */
             padding: 10px;
             border-radius: 5px;
-            width: calc(100% - 40px); /* Mengatur lebar konten header agar lebih proporsional */
+            width: calc(100% - 40px); /* Adjust header content width for better proportion */
         }
         .header-content h1 {
             margin: 0;
@@ -138,6 +138,14 @@
         <li>Jika terjadi hasil seri di pertandingan, akan diadakan pertandingan ulang dengan CATUR KILAT aturan waktu 3 menit.</li>
     </ul>
 
+    <h2>6. Schedule Pertandingan</h2>
+    <ul>
+        <li><strong>Babak 1:</strong> Pemain A vs Pemain B - Senin, 1 Agustus 2024, Pukul 09.00 WIB</li>
+        <li><strong>Babak 2:</strong> Pemain C vs Pemain D - Selasa, 2 Agustus 2024, Pukul 10.30 WIB</li>
+        <li><strong>Babak 3:</strong> Pemain E vs Pemain F - Rabu, 3 Agustus 2024, Pukul 11.45 WIB</li>
+        <!-- Add more matches as needed -->
+    </ul>
+
     <a href="https://docs.google.com/forms/d/e/1FAIpQLScw9BHde_49JIMd1NFpNRQsa2Cq-tXq8CbAlXqFdrfrxu7HuA/viewform" class="register-link">Daftar Sekarang</a>
 
     <div id="countdown" class="countdown"></div>
@@ -148,32 +156,38 @@
 </footer>
 
 <script>
-    // Hitung batas waktu dari 7 hari sejak saat ini
-    const countDownDate = new Date();
-    countDownDate.setDate(countDownDate.getDate() + 7);
-    
-    const countdownElement = document.getElementById('countdown');
+   // Calculate the target date in UTC, then adjust for Asia/Jakarta timezone (UTC+7)
+   const countDownDate = new Date();
+   countDownDate.setHours(countDownDate.getHours() + 7); // UTC+7 for Jakarta timezone
 
-    // Update hitungan mundur setiap detik
-    const interval = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = countDownDate - now;
+   // Get the countdown element
+   const countdownElement = document.getElementById('countdown');
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+   // Function to update the countdown every second
+   const interval = setInterval(function() {
+       const now = new Date().getTime();
+       const distance = countDownDate - now;
 
-        countdownElement.innerHTML = `Batas Waktu Pendaftaran: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+       if (distance > 0) {
+           const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+           const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+           const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+           const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // Jika hitungan mundur selesai
-        if (distance < 0) {
-            clearInterval(interval);
-            countdownElement.innerHTML = "Pendaftaran telah ditutup";
-            document.querySelector('.register-link').style.display = 'none';
-        }
-    }, 1000);
+           // Format time with leading zeros if needed
+           const formattedTime = `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+           
+           // Update the countdown element
+           countdownElement.innerHTML = `Batas Waktu Pendaftaran: ${formattedTime}`;
+       } else {
+           // If countdown is over, display message and hide register link
+           clearInterval(interval);
+           countdownElement.innerHTML = "Pendaftaran telah ditutup";
+           document.querySelector('.register-link').style.display = 'none';
+       }
+   }, 1000); // Update every second
 </script>
+
 
 </body>
 </html>
