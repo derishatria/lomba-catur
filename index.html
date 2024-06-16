@@ -150,30 +150,24 @@
 <script>
    // Function to calculate and set the countdown timer
    function setCountdown() {
-       // Retrieve countdown end time from localStorage
-       let countDownDate = localStorage.getItem('countDownDate');
+       // Get current time in Jakarta timezone
+       const nowJakarta = new Date().toLocaleString('en-US', {
+           timeZone: 'Asia/Jakarta'
+       });
 
-       // If countdown end time is not stored or is in the past, calculate a new one
-       if (!countDownDate || new Date(countDownDate) < new Date()) {
-           countDownDate = new Date();
-           countDownDate.setHours(countDownDate.getHours() + 7); // Set to UTC+7 (Asia/Jakarta timezone)
-           
-           // Store the new countdown end time in localStorage
-           localStorage.setItem('countDownDate', countDownDate);
-       } else {
-           countDownDate = new Date(countDownDate);
-       }
+       // Calculate the countdown end time (7 days from now in Jakarta timezone)
+       const countDownDate = new Date(nowJakarta);
+       countDownDate.setDate(countDownDate.getDate() + 7);
 
        // Get the countdown element
        const countdownElement = document.getElementById('countdown');
 
        // Function to update the countdown every second
        const interval = setInterval(function() {
-           // Get current time in Jakarta timezone
-           const now = new Date();
-           now.setHours(now.getHours() + 7); // Set to UTC+7 (Asia/Jakarta timezone)
-
-           const distance = countDownDate - now;
+           const now = new Date().toLocaleString('en-US', {
+               timeZone: 'Asia/Jakarta'
+           });
+           const distance = new Date(countDownDate) - new Date(now);
 
            if (distance > 0) {
                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -200,6 +194,7 @@
        setCountdown();
    });
 </script>
+
 
 </body>
 </html>
