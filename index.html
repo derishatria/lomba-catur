@@ -147,54 +147,71 @@
     &copy; Panitia Lomba 17 Agustus 2024 Pesona Ciputih RT 14 Blok AB Turnamen Catur
 </footer>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-   // Function to calculate and set the countdown timer
-   function setCountdown() {
-       // Get current time in Jakarta timezone
-       const nowJakarta = new Date().toLocaleString('en-US', {
-           timeZone: 'Asia/Jakarta'
-       });
+    // Function to fetch current time from external API
+    function getCurrentTime(callback) {
+        $.ajax({
+            url: 'https://time.is/Jakarta',
+            dataType: 'text',
+            success: function (data) {
+                // Extract current time from response
+                var currentTime = $(data).find('#twd').text().trim(); // Example, adjust as per the HTML structure of the website
+                callback(currentTime);
+            },
+            error: function () {
+                console.error('Failed to fetch current time from API.');
+                callback(null);
+            }
+        });
+    }
 
-       // Calculate the countdown end time (7 days from now in Jakarta timezone)
-       const countDownDate = new Date(nowJakarta);
-       countDownDate.setDate(countDownDate.getDate() + 7);
+    // Function to calculate and set the countdown timer
+    function setCountdown() {
+        // Get current time from external API
+        getCurrentTime(function (currentTime) {
+            if (!currentTime) {
+                return; // Exit if current time is not available
+            }
 
-       console.log('Countdown End Time:', countDownDate); // Debug: Log countdown end time
+            // Parse current time as Date object
+            var currentTimeObj = new Date(currentTime);
 
-       // Get the countdown element
-       const countdownElement = document.getElementById('countdown');
+            // Calculate the countdown end time (7 days from now)
+            var countDownDate = new Date(currentTimeObj);
+            countDownDate.setDate(countDownDate.getDate() + 7);
 
-       // Function to update the countdown every second
-       const interval = setInterval(function() {
-           const now = new Date().toLocaleString('en-US', {
-               timeZone: 'Asia/Jakarta'
-           });
-           const distance = new Date(countDownDate) - new Date(now);
+            // Get the countdown element
+            var countdownElement = document.getElementById('countdown');
 
-           console.log('Now:', now); // Debug: Log current time in Jakarta
-           console.log('Distance:', distance); // Debug: Log distance (difference in milliseconds)
+            // Function to update the countdown every second
+            var interval = setInterval(function() {
+                var now = new Date(currentTime); // Get current time from API
 
-           if (distance > 0) {
-               const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-               const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-               const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-               const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                var distance = countDownDate - now;
 
-               // Display the countdown in the 'countdown' element
-               countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                if (distance > 0) {
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-           } else {
-               // If the countdown is over, clear the interval and display a message
-               clearInterval(interval);
-               countdownElement.innerHTML = 'Countdown Over';
-           }
-       }, 1000); // Update every second (1000 milliseconds)
-   }
+                    // Display the countdown in the 'countdown' element
+                    countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-   // Call the setCountdown function when the page is loaded
-   document.addEventListener('DOMContentLoaded', function() {
-       setCountdown();
-   });
+                } else {
+                    // If the countdown is over, clear the interval and display a message
+                    clearInterval(interval);
+                    countdownElement.innerHTML = 'Countdown Over';
+                }
+            }, 1000); //
+        });
+    }
+
+    // Call the setCountdown function when the page is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        setCountdown();
+    });
 </script>
 
 </body>
